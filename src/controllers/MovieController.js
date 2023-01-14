@@ -10,11 +10,11 @@ export const getMovies = async (req, res) => {
 }
 
 export const createMovie = async(req, res) => {
-    const {title, description} = req.body;
+    const {title, description, status} = req.body;
 
     try{
-        const [rows] = await conn.query('INSERT INTO movies (title, description, created_at) VALUES (?, ?, NOW())', [title, description]);
-        res.send({id:rows.insertId, title:title, description:description});
+        const [rows] = await conn.query('INSERT INTO movies (title, description, status, created_at) VALUES (?, ?, ?, NOW())', [title, description, status]);
+        res.send({id:rows.insertId, title:title, description:description, status:status});
     }catch(error){
         return res.status(500).json({message: error.message});
     }
@@ -36,10 +36,10 @@ export const getMovie = async (req, res) => {
 
 export const updateMovie = async (req, res) => {
     const {id} = req.params;
-    const {title, description} = req.body;
+    const {title, description, status} = req.body;
 
     try{ 
-        const [result] = await conn.query('UPDATE movies SET title=IFNULL(?, title), description=IFNULL(?, description) WHERE id=?', [title, description, id]);
+        const [result] = await conn.query('UPDATE movies SET title=IFNULL(?, title), description=IFNULL(?, description), status=IFNULL(?, status) WHERE id=?', [title, description, status, id]);
     
         if(result.affectedRows === 0) return res.status(404).json({
             message:'Movie not found'
