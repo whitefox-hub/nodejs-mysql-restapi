@@ -1,4 +1,6 @@
 import express from 'express';
+import cors from 'cors';
+
 import {auth} from 'express-openid-connect';
 
 import MovieRoutes from './routes/MovieRoutes.js';
@@ -6,6 +8,7 @@ import AuthRoutes from './routes/AuthRoutes.js';
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 const auth_config = {
     authRequired: false,
@@ -15,6 +18,7 @@ const auth_config = {
     clientID: 'fQl6PJiHjt9PnIuqUPti019axRmALXJf',
     issuerBaseURL: 'https://dev-i12vydp3hw8gyx7c.us.auth0.com'
 };
+
 
 app.use(auth(auth_config));
 

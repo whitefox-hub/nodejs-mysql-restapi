@@ -10,7 +10,7 @@ export const getMovies = async (req, res) => {
 }
 
 export const createMovie = async(req, res) => {
-    const {title, description, status} = req.body;
+    const {title, description, status} = req.body._rawValue;
 
     try{
         const [rows] = await conn.query('INSERT INTO movies (title, description, status, created_at) VALUES (?, ?, ?, NOW())', [title, description, status]);
@@ -36,9 +36,9 @@ export const getMovie = async (req, res) => {
 
 export const updateMovie = async (req, res) => {
     const {id} = req.params;
-    const {title, description, status} = req.body;
+    const {title, description, status} = req.body._rawValue;
 
-    try{ 
+    try{
         const [result] = await conn.query('UPDATE movies SET title=IFNULL(?, title), description=IFNULL(?, description), status=IFNULL(?, status) WHERE id=?', [title, description, status, id]);
     
         if(result.affectedRows === 0) return res.status(404).json({
